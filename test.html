@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Giriş Yap — Günbatımı Kulübü</title>
+<style>
+  :root {
+    --bg: #f5e6c8;
+    --paper: #fff8e9;
+    --ink: #3b2417;
+    --ink-soft: #6b4a34;
+    --accent: #e2622b;
+    --accent-2: #e8a93d;
+    --teal: #1d6c66;
+    --rose: #c1555b;
+    --line: rgba(59, 36, 23, 0.18);
+    color-scheme: light;
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #1b1830;
+    --paper: #2a2340;
+    --ink: #f5e6c8;
+    --ink-soft: #d8c39c;
+    --accent: #f0813f;
+    --accent-2: #f0b84d;
+    --teal: #5cbdb5;
+    --rose: #e08a90;
+    --line: rgba(245, 230, 200, 0.16);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1830;
+      --paper: #2a2340;
+      --ink: #f5e6c8;
+      --ink-soft: #d8c39c;
+      --accent: #f0813f;
+      --accent-2: #f0b84d;
+      --teal: #5cbdb5;
+      --rose: #e08a90;
+      --line: rgba(245, 230, 200, 0.16);
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+  }
+
+  body {
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .stage {
+    display: grid;
+    grid-template-columns: minmax(320px, 46%) 1fr;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  @media (max-width: 860px) {
+    .stage { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Sunset scene ---------- */
+  .scene {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(
+      to bottom,
+      #f7d9a8 0%,
+      #f2b26a 22%,
+      var(--rose) 46%,
+      var(--teal) 78%,
+      #123c3a 100%
+    );
+    min-height: 320px;
+  }
+
+  .scene::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/></svg>");
+    pointer-events: none;
+  }
+
+  .sun {
+    position: absolute;
+    left: 50%;
+    bottom: 30%;
+    width: 62%;
+    aspect-ratio: 1 / 1;
+    max-width: 420px;
+    transform: translate(-50%, 35%);
+    border-radius: 50%;
+    background: linear-gradient(
+      to bottom,
+      #fff3d6 0%,
+      var(--accent-2) 35%,
+      var(--accent) 68%,
+      #b5401d 100%
+    );
+    box-shadow: 0 0 90px 10px rgba(232, 100, 43, 0.45);
+    -webkit-mask-image: repeating-linear-gradient(
+      to bottom,
+      #000 0px,
+      #000 10px,
+      transparent 10px,
+      transparent 18px
+    );
+    mask-image: repeating-linear-gradient(
+      to bottom,
+      #000 0px,
+      #000 10px,
+      transparent 10px,
+      transparent 18px
+    );
+    -webkit-mask-composite: source-over;
+  }
+
+  .sun::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    -webkit-mask-image: none;
+    mask-image: none;
+    background: inherit;
+    clip-path: inset(0 0 62% 0);
+  }
+
+  .ridge {
+    position: absolute;
+    left: -5%;
+    right: -5%;
+    height: 34%;
+  }
+
+  .ridge--back {
+    bottom: -2%;
+    background: var(--teal);
+    opacity: 0.9;
+    clip-path: polygon(0% 60%, 12% 40%, 26% 55%, 40% 30%, 55% 50%, 70% 25%, 85% 48%, 100% 35%, 100% 100%, 0% 100%);
+  }
+
+  .ridge--front {
+    bottom: -4%;
+    height: 26%;
+    background: #0e2b2a;
+    clip-path: polygon(0% 70%, 15% 45%, 30% 62%, 48% 38%, 62% 58%, 78% 40%, 100% 60%, 100% 100%, 0% 100%);
+  }
+
+  .scene-copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 9%;
+    text-align: center;
+    padding: 0 1.5rem;
+  }
+
+  .scene-eyebrow {
+    font-family: Futura, 'Century Gothic', 'Avenir Next', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: #3b2417;
+    opacity: 0.75;
+  }
+
+  .scene-title {
+    font-family: Futura, 'Century Gothic', 'Avenir Next', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    letter-spacing: 0.03em;
+    margin: 0.5rem 0 0.4rem;
+    color: #3b2417;
+    text-wrap: balance;
+  }
+
+  .scene-sub {
+    font-style: italic;
+    font-size: 1.05rem;
+    color: #47281c;
+    opacity: 0.85;
+  }
+
+  /* ---------- Form side ---------- */
+  .form-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    background: var(--bg);
+  }
+
+  .card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 2.5rem 2.25rem 2rem;
+    box-shadow: 6px 6px 0 var(--accent), 6px 6px 0 1px var(--line);
+  }
+
+  .card-heading {
+    font-family: Futura, 'Century Gothic', 'Avenir Next', sans-serif;
+    font-weight: 700;
+    font-size: 1.7rem;
+    letter-spacing: 0.01em;
+    margin: 0 0 0.35rem;
+  }
+
+  .card-lede {
+    margin: 0 0 1.9rem;
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+  }
+
+  form { display: flex; flex-direction: column; gap: 1.35rem; }
+
+  .field { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .field label {
+    font-family: Futura, 'Century Gothic', 'Avenir Next', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .field input {
+    font: inherit;
+    font-size: 1.02rem;
+    color: var(--ink);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--line);
+    padding: 0.45rem 0.1rem;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .field input::placeholder { color: var(--ink-soft); opacity: 0.55; }
+
+  .field input:focus {
+    border-bottom-color: var(--accent);
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+
+  .remember {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .remember input {
+    accent-color: var(--accent);
+    width: 15px;
+    height: 15px;
+  }
+
+  a {
+    color: var(--teal);
+    text-decoration: underline;
+    text-decoration-color: var(--line);
+    text-underline-offset: 3px;
+  }
+
+  a:hover { text-decoration-color: currentColor; }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .submit {
+    font-family: Futura, 'Century Gothic', 'Avenir Next', sans-serif;
+    font-weight: 700;
+    font-size: 0.92rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff8e9;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .submit:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .submit:active {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0.15rem 0;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .signup {
+    text-align: center;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    margin-top: 0.2rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .submit { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <section class="scene" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="ridge ridge--back"></div>
+    <div class="ridge ridge--front"></div>
+    <div class="scene-copy">
+      <p class="scene-eyebrow">Günbatımı Kulübü</p>
+      <h1 class="scene-title">Tekrar Hoş Geldin</h1>
+      <p class="scene-sub">Seni özledik.</p>
+    </div>
+  </section>
+
+  <section class="form-side">
+    <div class="card">
+      <h2 class="card-heading">Giriş Yap</h2>
+      <p class="card-lede">Hesabına devam etmek için bilgilerini gir.</p>
+
+      <form>
+        <div class="field">
+          <label for="email">E-posta</label>
+          <input id="email" name="email" type="email" placeholder="sen@ornek.com" autocomplete="username" required />
+        </div>
+
+        <div class="field">
+          <label for="password">Şifre</label>
+          <input id="password" name="password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+
+        <div class="row">
+          <label class="remember">
+            <input type="checkbox" name="remember" />
+            Beni hatırla
+          </label>
+          <a href="#">Şifreni mi unuttun?</a>
+        </div>
+
+        <button class="submit" type="submit">Giriş Yap</button>
+
+        <div class="divider">veya</div>
+
+        <p class="signup">Hesabın yok mu? <a href="#">Kayıt ol</a></p>
+      </form>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>
