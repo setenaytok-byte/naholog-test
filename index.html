@@ -6,42 +6,16 @@
 <title>Giriş Yap — Günbatımı Kulübü</title>
 <style>
   :root {
-    --bg: #f5e6c8;
-    --paper: #fff8e9;
-    --ink: #3b2417;
-    --ink-soft: #6b4a34;
+    --bg: #14110b;
+    --paper: #241c14;
+    --ink: #f5e6c8;
+    --ink-soft: #b99e78;
     --accent: #e2622b;
     --accent-2: #e8a93d;
-    --teal: #1d6c66;
+    --teal: #4fada6;
     --rose: #c1555b;
-    --line: rgba(59, 36, 23, 0.18);
-    color-scheme: light;
-  }
-
-  :root[data-theme="dark"] {
-    --bg: #1b1830;
-    --paper: #2a2340;
-    --ink: #f5e6c8;
-    --ink-soft: #d8c39c;
-    --accent: #f0813f;
-    --accent-2: #f0b84d;
-    --teal: #5cbdb5;
-    --rose: #e08a90;
-    --line: rgba(245, 230, 200, 0.16);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #1b1830;
-      --paper: #2a2340;
-      --ink: #f5e6c8;
-      --ink-soft: #d8c39c;
-      --accent: #f0813f;
-      --accent-2: #f0b84d;
-      --teal: #5cbdb5;
-      --rose: #e08a90;
-      --line: rgba(245, 230, 200, 0.16);
-    }
+    --line: rgba(245, 230, 200, 0.14);
+    color-scheme: dark;
   }
 
   * { box-sizing: border-box; }
@@ -304,6 +278,30 @@
     margin-top: 0.2rem;
   }
 
+  .form-error {
+    margin: -0.6rem 0 0;
+    font-size: 0.85rem;
+    color: var(--rose);
+  }
+
+  .welcome {
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  .welcome-heading {
+    font-family: Futura, 'Century Gothic', 'Avenir Next', sans-serif;
+    font-weight: 700;
+    font-size: 1.7rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .welcome-lede {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+    margin: 0;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .submit { transition: none; }
   }
@@ -327,7 +325,7 @@
       <h2 class="card-heading">Giriş Yap</h2>
       <p class="card-lede">Hesabına devam etmek için bilgilerini gir.</p>
 
-      <form>
+      <form id="loginForm">
         <div class="field">
           <label for="email">E-posta</label>
           <input id="email" name="email" type="email" placeholder="sen@ornek.com" autocomplete="username" required />
@@ -337,6 +335,8 @@
           <label for="password">Şifre</label>
           <input id="password" name="password" type="password" placeholder="••••••••" autocomplete="current-password" required />
         </div>
+
+        <p class="form-error" id="loginError" hidden>E-posta veya şifre hatalı.</p>
 
         <div class="row">
           <label class="remember">
@@ -355,6 +355,29 @@
     </div>
   </section>
 </div>
+
+<script>
+  var VALID_EMAIL = 'omer.yazici@naholog.com';
+  var VALID_PASSWORD = 'nahnah';
+
+  document.getElementById('loginForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    var email = document.getElementById('email').value.trim().toLowerCase();
+    var password = document.getElementById('password').value;
+    var errorEl = document.getElementById('loginError');
+
+    if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+      document.querySelector('.card').innerHTML =
+        '<div class="welcome">' +
+        '<h2 class="welcome-heading">Hoş geldin, Ömer!</h2>' +
+        '<p class="welcome-lede">Giriş başarılı.</p>' +
+        '</div>';
+    } else {
+      errorEl.hidden = false;
+    }
+  });
+</script>
 
 </body>
 </html>
