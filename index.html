@@ -71,95 +71,35 @@
     .stage { grid-template-columns: 1fr; }
   }
 
-  /* ---------- Sunset scene ---------- */
+  /* ---------- Photo scene ---------- */
   .scene {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(
-      to bottom,
-      #f7d9a8 0%,
-      #f2b26a 22%,
-      var(--rose) 46%,
-      var(--teal) 78%,
-      #123c3a 100%
-    );
     min-height: 320px;
+    background: #12100a;
+  }
+
+  .scene-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
   }
 
   .scene::after {
     content: "";
     position: absolute;
     inset: 0;
-    opacity: 0.5;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/></svg>");
-    pointer-events: none;
-  }
-
-  .sun {
-    position: absolute;
-    left: 50%;
-    bottom: 30%;
-    width: 62%;
-    aspect-ratio: 1 / 1;
-    max-width: 420px;
-    transform: translate(-50%, 35%);
-    border-radius: 50%;
     background: linear-gradient(
       to bottom,
-      #fff3d6 0%,
-      var(--accent-2) 35%,
-      var(--accent) 68%,
-      #b5401d 100%
+      rgba(18, 16, 10, 0.72) 0%,
+      rgba(18, 16, 10, 0.25) 32%,
+      rgba(18, 16, 10, 0.15) 55%,
+      rgba(18, 16, 10, 0.75) 100%
     );
-    box-shadow: 0 0 90px 10px rgba(232, 100, 43, 0.45);
-    -webkit-mask-image: repeating-linear-gradient(
-      to bottom,
-      #000 0px,
-      #000 10px,
-      transparent 10px,
-      transparent 18px
-    );
-    mask-image: repeating-linear-gradient(
-      to bottom,
-      #000 0px,
-      #000 10px,
-      transparent 10px,
-      transparent 18px
-    );
-    -webkit-mask-composite: source-over;
-  }
-
-  .sun::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    -webkit-mask-image: none;
-    mask-image: none;
-    background: inherit;
-    clip-path: inset(0 0 62% 0);
-  }
-
-  .ridge {
-    position: absolute;
-    left: -5%;
-    right: -5%;
-    height: 34%;
-  }
-
-  .ridge--back {
-    bottom: -2%;
-    background: var(--teal);
-    opacity: 0.9;
-    clip-path: polygon(0% 60%, 12% 40%, 26% 55%, 40% 30%, 55% 50%, 70% 25%, 85% 48%, 100% 35%, 100% 100%, 0% 100%);
-  }
-
-  .ridge--front {
-    bottom: -4%;
-    height: 26%;
-    background: #0e2b2a;
-    clip-path: polygon(0% 70%, 15% 45%, 30% 62%, 48% 38%, 62% 58%, 78% 40%, 100% 60%, 100% 100%, 0% 100%);
+    pointer-events: none;
   }
 
   .scene-copy {
@@ -169,6 +109,7 @@
     top: 9%;
     text-align: center;
     padding: 0 1.5rem;
+    z-index: 1;
   }
 
   .scene-eyebrow {
@@ -176,8 +117,8 @@
     font-size: 0.72rem;
     letter-spacing: 0.42em;
     text-transform: uppercase;
-    color: #3b2417;
-    opacity: 0.75;
+    color: var(--accent-2);
+    opacity: 0.9;
   }
 
   .scene-title {
@@ -186,15 +127,30 @@
     font-size: clamp(2.1rem, 5vw, 3.1rem);
     letter-spacing: 0.03em;
     margin: 0.5rem 0 0.4rem;
-    color: #3b2417;
+    color: #fff8e9;
     text-wrap: balance;
   }
 
   .scene-sub {
     font-style: italic;
     font-size: 1.05rem;
-    color: #47281c;
-    opacity: 0.85;
+    color: #f0e2c4;
+    opacity: 0.9;
+  }
+
+  .scene-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8%;
+    z-index: 1;
+    text-align: center;
+    padding: 0 1.5rem;
+    font-family: Futura, 'Century Gothic', 'Avenir Next', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-2);
   }
 
   /* ---------- Form side ---------- */
@@ -356,15 +312,14 @@
 <body>
 
 <div class="stage">
-  <section class="scene" aria-hidden="true">
-    <div class="sun"></div>
-    <div class="ridge ridge--back"></div>
-    <div class="ridge ridge--front"></div>
+  <section class="scene">
+    <img class="scene-photo" src="omer.jpg" alt="Ömer" />
     <div class="scene-copy">
       <p class="scene-eyebrow">Günbatımı Kulübü</p>
-      <h1 class="scene-title">Tekrar Hoş Geldin</h1>
+      <h1 class="scene-title">Ömer Hoşgeldin</h1>
       <p class="scene-sub">Seni özledik.</p>
     </div>
+    <p class="scene-caption">Daha fazlası için lütfen giriş yapın</p>
   </section>
 
   <section class="form-side">
